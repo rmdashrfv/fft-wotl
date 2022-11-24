@@ -3,6 +3,53 @@ import { UNITS, WEAPONS } from './utils'
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
+const Equipment = ({ eq }) => {
+  return(
+    <div>
+      {
+        Object.keys(eq)?.map((key) => {
+          console.log(eq, key)
+          return(
+            <div>
+              {key} -- {eq[key] && <span>{eq[key].name}</span>}
+            </div>
+          )
+        })
+      }
+    </div>
+  )
+}
+
+const UnitStats = ({ unit }) => {
+  return(
+    <div style={{position: 'fixed', top: '15%', left: '33%', zIndex: 1, backgroundColor: '#fff', border: '1px solid brown', height: '400px', width: '80%'}}>
+      <button>x</button><br/>
+      <img src={unit.imgSrc} height={'auto'} width={'35'} /><br />
+      <p>{unit.name} lv. {unit.level} Exp. {unit.exp}</p>
+      <p>{unit.job}</p>
+      <p>
+        HP: {unit.hp}<br />
+        MP: {unit.mp}<br />
+        CT: -- / --<br />
+      </p>
+      <hr />
+      <h4>EQP.</h4>
+      <div style={{border: '1px solid brown'}}>
+        <Equipment eq={unit.equipment} />
+      </div>
+    </div>
+  )
+}
+
+const FormationMenuController = ({ view, unit }) => {
+  switch (view) {
+    case 'unit_status':
+      return <UnitStats unit={unit} />
+    default:
+      return null
+  }
+}
+
 // GIL is money in Final Fantasy
 function App() {
   const [gil, setGil] = useState(10_000)
@@ -12,11 +59,15 @@ function App() {
   // when we buy a unit, we will put them in this array
   const [party, setParty] = useState([])
   const [selectedItem, setSelectedItem] = useState(null)
+  const [currentView, setCurrentView] = useState(null)
+  const [currentUnit, setCurrentUnit] = useState(null)
+  const [viewingMenu, setViewingMenu] = useState(false)
 
   const hireUnit = (unit) => {
     if (gil - unit.cost < 0) return;
     setGil(gil - unit.cost)
     let newUnitName = prompt(`What is the ${unit.job}'s name?`)
+    if (!newUnitName || newUnitName === '') return;
     // Hellman's
     setParty([...party, {...unit, name: newUnitName, id: uuidv4() }])
   }
@@ -42,6 +93,13 @@ function App() {
 
   const chooseItem = (item) => {
     setSelectedItem(item)
+  }
+
+  const clickUnit = (unit) => {
+    if (selectedItem) return equipUnit(unit)
+    setViewingMenu(true)
+    setCurrentUnit(unit)
+    setCurrentView('unit_status')
   }
 
   const equipUnit = (unit) => {
@@ -109,10 +167,9 @@ function App() {
       {
         party.map((member) => {
           return(
-             <div onClick={() => { equipUnit(member) }}>
+             <div onClick={() => { clickUnit(member) }}>
                 <img src={member.imgSrc} height={'auto'} width={'35'} /><br />
-                <p>{member.name} lv. {member.level}</p>
-                <p>{member.id}</p>
+                <p>{member.name} lv. {member.level} Exp. {member.exp}</p>
                 <p>
                   HP: {member.hp}<br />
                   MP: {member.mp}<br />
@@ -124,6 +181,7 @@ function App() {
         })
       }
       </div>
+      { viewingMenu && <FormationMenuController view={currentView} unit={currentUnit} />}
     </div>
   )
 }
