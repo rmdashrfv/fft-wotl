@@ -1,14 +1,15 @@
 import './App.css'
 import { UNITS, WEAPONS } from './utils'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+// faker
 
 const Equipment = ({ eq }) => {
+  console.log('equip unit change')
   return(
     <div>
       {
         Object.keys(eq)?.map((key) => {
-          console.log(eq, key)
           return(
             <div>
               {key} -- {eq[key] && <span>{eq[key].name}</span>}
@@ -21,6 +22,10 @@ const Equipment = ({ eq }) => {
 }
 
 const UnitStats = ({ unit }) => {
+  useEffect(() => {
+
+  }, [])
+
   return(
     <div style={{position: 'fixed', top: '15%', left: '33%', zIndex: 1, backgroundColor: '#fff', border: '1px solid brown', height: '400px', width: '80%'}}>
       <button>x</button><br/>
@@ -42,6 +47,10 @@ const UnitStats = ({ unit }) => {
 }
 
 const FormationMenuController = ({ view, unit }) => {
+   useEffect(() => {
+
+  }, [unit])
+  
   switch (view) {
     case 'unit_status':
       return <UnitStats unit={unit} />
@@ -62,6 +71,8 @@ function App() {
   const [currentView, setCurrentView] = useState(null)
   const [currentUnit, setCurrentUnit] = useState(null)
   const [viewingMenu, setViewingMenu] = useState(false)
+
+  useEffect(() => { }, [currentUnit])
 
   const hireUnit = (unit) => {
     if (gil - unit.cost < 0) return;
@@ -95,21 +106,28 @@ function App() {
     setSelectedItem(item)
   }
 
-  const clickUnit = (unit) => {
-    if (selectedItem) return equipUnit(unit)
+  const clickUnit = (unit, i) => {
+    if (selectedItem) return equipUnit(unit, i)
     setViewingMenu(true)
     setCurrentUnit(unit)
     setCurrentView('unit_status')
   }
 
-  const equipUnit = (unit) => {
-    unit.equipment[selectedItem.type] = selectedItem
+  const equipUnit = (unit, i) => {
+    let newParty = party.map((u, idx) => {
+      if (idx === i) {
+        return {...unit, equipment: {...u.equipment, [selectedItem.type]: selectedItem}}
+      } else {
+        return u;
+      }
+    })
     setSelectedItem(null)
     setInventory((prevState) => {
       return [...prevState.filter((i) => {
         return i.id !== selectedItem.id
       })]
     })
+    setParty(newParty)
     console.log(party)
   }
   
@@ -165,9 +183,9 @@ function App() {
       {/* render units in the party that have been hired */}
       <div style={{display: 'flex', gap: '5px'}}>
       {
-        party.map((member) => {
+        party.map((member, i) => {
           return(
-             <div onClick={() => { clickUnit(member) }}>
+             <div onClick={() => { clickUnit(member, i) }}>
                 <img src={member.imgSrc} height={'auto'} width={'35'} /><br />
                 <p>{member.name} lv. {member.level} Exp. {member.exp}</p>
                 <p>
