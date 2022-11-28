@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 // faker
 
-const Equipment = ({ eq }) => {
+const Equipment = ({ unit }) => {
+  const eq = unit.equipment;
   console.log('equip unit change')
   return(
     <div>
@@ -22,9 +23,10 @@ const Equipment = ({ eq }) => {
 }
 
 const UnitStats = ({ unit }) => {
+  if (!unit) return null
   useEffect(() => {
 
-  }, [])
+  }, [unit])
 
   return(
     <div style={{position: 'fixed', top: '15%', left: '33%', zIndex: 1, backgroundColor: '#fff', border: '1px solid brown', height: '400px', width: '80%'}}>
@@ -40,17 +42,13 @@ const UnitStats = ({ unit }) => {
       <hr />
       <h4>EQP.</h4>
       <div style={{border: '1px solid brown'}}>
-        <Equipment eq={unit.equipment} />
+        <Equipment unit={unit} />
       </div>
     </div>
   )
 }
 
 const FormationMenuController = ({ view, unit }) => {
-   useEffect(() => {
-
-  }, [unit])
-  
   switch (view) {
     case 'unit_status':
       return <UnitStats unit={unit} />
@@ -109,14 +107,16 @@ function App() {
   const clickUnit = (unit, i) => {
     if (selectedItem) return equipUnit(unit, i)
     setViewingMenu(true)
-    setCurrentUnit(unit)
+    setCurrentUnit(party.find(u => u.id === unit.id))
     setCurrentView('unit_status')
   }
 
   const equipUnit = (unit, i) => {
     let newParty = party.map((u, idx) => {
       if (idx === i) {
-        return {...unit, equipment: {...u.equipment, [selectedItem.type]: selectedItem}}
+        const curr = {...unit, equipment: {...u.equipment, [selectedItem.type]: selectedItem}}
+        setCurrentUnit(curr)
+        return curr
       } else {
         return u;
       }
@@ -164,6 +164,7 @@ function App() {
       </div>
       <hr />
       <h2>INVENTORY</h2>
+      <div style={{display: 'flex', gap: '5px'}}>
       {
         inventory.map((i) => {
           return(
@@ -177,7 +178,7 @@ function App() {
             </div>
           )
         })
-      }
+      }</div>
       <hr />
       <h2>FORMATION</h2>
       {/* render units in the party that have been hired */}
@@ -199,7 +200,9 @@ function App() {
         })
       }
       </div>
-      { viewingMenu && <FormationMenuController view={currentView} unit={currentUnit} />}
+      {/* { viewingMenu && <FormationMenuController view={currentView} unit={currentUnit} />} */}
+      {/* <FormationMenuController view={currentView} unit={currentUnit} /> */}
+      { <UnitStats unit={currentUnit} />}
     </div>
   )
 }
