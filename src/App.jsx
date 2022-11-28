@@ -2,6 +2,7 @@ import './App.css'
 import { UNITS, WEAPONS } from './utils'
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import { faker } from '@faker-js/faker'
 // faker
 
 const Equipment = ({ unit }) => {
@@ -22,7 +23,7 @@ const Equipment = ({ unit }) => {
   )
 }
 
-const UnitStats = ({ unit }) => {
+const UnitStats = ({ unit, setCurrentUnit }) => {
   if (!unit) return null
   useEffect(() => {
 
@@ -30,7 +31,7 @@ const UnitStats = ({ unit }) => {
 
   return(
     <div style={{position: 'fixed', top: '15%', left: '33%', zIndex: 1, backgroundColor: '#fff', border: '1px solid brown', height: '400px', width: '80%'}}>
-      <button>x</button><br/>
+      <button onClick={() => setCurrentUnit(null)}>x</button><br/>
       <img src={unit.imgSrc} height={'auto'} width={'35'} /><br />
       <p>{unit.name} lv. {unit.level} Exp. {unit.exp}</p>
       <p>{unit.job}</p>
@@ -76,7 +77,7 @@ function App() {
     if (gil - unit.cost < 0) return;
     setGil(gil - unit.cost)
     let newUnitName = prompt(`What is the ${unit.job}'s name?`)
-    if (!newUnitName || newUnitName === '') return;
+    if (!newUnitName || newUnitName === '') newUnitName = faker.name.firstName('male')
     // Hellman's
     setParty([...party, {...unit, name: newUnitName, id: uuidv4() }])
   }
@@ -202,7 +203,7 @@ function App() {
       </div>
       {/* { viewingMenu && <FormationMenuController view={currentView} unit={currentUnit} />} */}
       {/* <FormationMenuController view={currentView} unit={currentUnit} /> */}
-      { <UnitStats unit={currentUnit} />}
+      { currentUnit && <UnitStats unit={currentUnit} setCurrentUnit={setCurrentUnit} />}
     </div>
   )
 }
