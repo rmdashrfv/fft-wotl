@@ -112,14 +112,20 @@ function App() {
     setCurrentView('unit_status')
   }
 
+  /*
+   take a unit and their pos in the party array
+   if the pos matches the unit we trying to update
+   simple return a new unit obj that reflects the update
+   or return an untampered obj
+  */
   const equipUnit = (unit, i) => {
     let newParty = party.map((u, idx) => {
-      if (idx === i) {
+      if (idx === i) { // if the unit position is the same
         const curr = {...unit, equipment: {...u.equipment, [selectedItem.type]: selectedItem}}
         setCurrentUnit(curr)
-        return curr
+        return curr // the modified unit w/ new equipment
       } else {
-        return u;
+        return u; // untampered with unit object
       }
     })
     setSelectedItem(null)
