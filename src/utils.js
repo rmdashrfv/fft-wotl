@@ -93,10 +93,35 @@ export const UNITS = [
   }
 ]
 
+export const ARMOR = {
+  clothing: [
+    {
+      name: "Clothing",
+      stock: 10,
+      inStock: true,
+      cost: 200,
+      imgSrc:
+        "http://www.videogamesprites.net/FinalFantasyTactics/Objects/Inventory/Clothing.gif",
+      equippable: ["Chemist"],
+    },
+  ],
+  armor: [
+    {
+      name: "Leather Armor",
+      stock: 10,
+      inStock: true,
+      cost: 400,
+      imgSrc:
+        "http://www.videogamesprites.net/FinalFantasyTactics/Objects/Inventory/LeatherArmor.gif",
+      equippable: ["Squire"],
+    },
+  ],
+};
+
 export const WEAPONS = {
   swords: [
     {
-      name: 'Broadsword',
+      name: "Broadsword",
       attack: 4,
       defense: 0,
       cost: 200,
@@ -104,10 +129,11 @@ export const WEAPONS = {
       range: 0,
       stock: 10,
       inStock: true,
-      type: 'rHand'
+      type: "rHand",
+      imgSrc: "http://www.videogamesprites.net/FinalFantasyTactics/Objects/Inventory/Broadsword.gif"
     },
     {
-      name: 'Longsword',
+      name: "Longsword",
       attack: 5,
       defense: 0,
       cost: 900,
@@ -115,7 +141,32 @@ export const WEAPONS = {
       range: 0,
       stock: 3,
       inStock: true,
-      type: 'rHand'
-    }
-  ]
-}
+      type: "rHand",
+      imgSrc: "http://www.videogamesprites.net/FinalFantasyTactics/Objects/Inventory/LongSword.gif"
+    },
+  ],
+  knives: [
+    {
+      name: "Dagger",
+      attack: 5,
+      defense: 0,
+      cost: 900,
+      magicPower: 0,
+      range: 0,
+      stock: 3,
+      inStock: true,
+      imgSrc: "http://www.videogamesprites.net/FinalFantasyTactics/Objects/Inventory/Dagger.gif",
+    },
+    {
+      name: "Mage Masher",
+      attack: 5,
+      defense: 0,
+      cost: 900,
+      magicPower: 0,
+      range: 0,
+      stock: 3,
+      inStock: true,
+      imgSrc: "http://www.videogamesprites.net/FinalFantasyTactics/Objects/Inventory/MageMasher.gif",
+    },
+  ],
+};

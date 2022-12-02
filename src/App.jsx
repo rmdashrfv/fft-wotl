@@ -1,5 +1,7 @@
 import './App.css'
-import { UNITS, WEAPONS } from './utils'
+import { UNITS, WEAPONS, ARMOR }from './utils'
+const { knives, swords } = WEAPONS
+const { clothing, armor } = ARMOR
 import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { faker } from '@faker-js/faker'
@@ -62,7 +64,12 @@ const FormationMenuController = ({ view, unit }) => {
 function App() {
   const [gil, setGil] = useState(10_000)
   const [forHire, setForHire] = useState(UNITS)
-  const [items, setItems] = useState(WEAPONS.swords)
+  const [items, setItems] = useState([
+    ...swords,
+    ...knives,
+    ...clothing,
+    ...armor
+  ])
   const [inventory, setInventory] = useState([])
   // when we buy a unit, we will put them in this array
   const [party, setParty] = useState([])
@@ -77,7 +84,7 @@ function App() {
     if (gil - unit.cost < 0) return;
     setGil(gil - unit.cost)
     let newUnitName = prompt(`What is the ${unit.job}'s name?`)
-    if (!newUnitName || newUnitName === '') newUnitName = faker.name.firstName('male')
+    if (!newUnitName || newUnitName === '') newUnitName = faker.name.firstName(unit.gender)
     // Hellman's
     setParty([...party, {...unit, name: newUnitName, id: uuidv4() }])
   }
@@ -161,7 +168,7 @@ function App() {
         items.map((item) => {
           return(
             <div style={{opacity: item.inStock ? '1' : '0.5'}}>
-              <img alt={item.name} /><br />
+              <img alt={item.name} src={item.imgSrc} /><br />
               <p>IN STOCK: {item.stock}</p>
               <button onClick={() => { purchaseItem(item) }}>{item.inStock ? `Purchase ${item.cost}` : 'OUT OF STOCK'}</button>
             </div>
