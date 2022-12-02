@@ -103,6 +103,7 @@ export const ARMOR = {
       imgSrc:
         "http://www.videogamesprites.net/FinalFantasyTactics/Objects/Inventory/Clothing.gif",
       equippable: ["Chemist"],
+      type: "armor"
     },
   ],
   armor: [
@@ -114,6 +115,7 @@ export const ARMOR = {
       imgSrc:
         "http://www.videogamesprites.net/FinalFantasyTactics/Objects/Inventory/LeatherArmor.gif",
       equippable: ["Squire"],
+      type: "armor"
     },
   ],
 };
@@ -155,6 +157,7 @@ export const WEAPONS = {
       range: 0,
       stock: 3,
       inStock: true,
+      type: "rHand",
       imgSrc: "http://www.videogamesprites.net/FinalFantasyTactics/Objects/Inventory/Dagger.gif",
     },
     {
@@ -166,6 +169,7 @@ export const WEAPONS = {
       range: 0,
       stock: 3,
       inStock: true,
+      type: "rHand",
       imgSrc: "http://www.videogamesprites.net/FinalFantasyTactics/Objects/Inventory/MageMasher.gif",
     },
   ],

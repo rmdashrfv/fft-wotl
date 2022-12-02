@@ -126,22 +126,42 @@ function App() {
    or return an untampered obj
   */
   const equipUnit = (unit, i) => {
-    let newParty = party.map((u, idx) => {
-      if (idx === i) { // if the unit position is the same
-        const curr = {...unit, equipment: {...u.equipment, [selectedItem.type]: selectedItem}}
-        setCurrentUnit(curr)
-        return curr // the modified unit w/ new equipment
-      } else {
-        return u; // untampered with unit object
-      }
-    })
-    setSelectedItem(null)
-    setInventory((prevState) => {
-      return [...prevState.filter((i) => {
-        return i.id !== selectedItem.id
-      })]
-    })
-    setParty(newParty)
+    if (!unit.equipment[selectedItem.type]) {
+        let newParty = party.map((u, idx) => {
+        if (idx === i) { // if the unit position is the same
+          const curr = {...unit, equipment: {...u.equipment, [selectedItem.type]: selectedItem}}
+          setCurrentUnit(curr)
+          return curr // the modified unit w/ new equipment
+        } else {
+          return u; // untampered with unit object
+        }
+      })
+      setSelectedItem(null)
+      setInventory((prevState) => {
+        return [...prevState.filter((i) => {
+          return i.id !== selectedItem.id
+        })]
+      })
+      setParty(newParty)
+    } else { // something is being held/worn
+      let itemHeld = unit.equipment[selectedItem.type]
+      let newParty = party.map((u, idx) => {
+        if (idx === i) { // if the unit position is the same
+          const curr = {...unit, equipment: {...u.equipment, [selectedItem.type]: selectedItem}}
+          setCurrentUnit(curr)
+          return curr // the modified unit w/ new equipment
+        } else {
+          return u; // untampered with unit object
+        }
+      })
+      setSelectedItem(null)
+      setInventory((prevState) => {
+        return [...prevState.filter((i) => {
+          return i.id !== selectedItem.id
+        }), itemHeld]
+      })
+      setParty(newParty)
+    }
     console.log(party)
   }
   
