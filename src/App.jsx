@@ -6,6 +6,43 @@ import { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { faker } from '@faker-js/faker'
 // faker
+const plains = [
+  [1,1,1,0,1,1,1,1,1,1,1,1],
+  [1,1,1,0,0,1,1,0,1,1,1,1],
+  [1,1,1,1,1,1,1,1,1,1,1,1]
+]
+
+const Tile = ({ surface }) => {
+  const getSurfaceColor = () => {
+
+  }
+  
+  return(
+    <div style={{
+      border: '1px solid black',
+      height: '48px', width: '48px',
+      background: surface === 0 ? 'black' : 'green'
+    }}></div>
+  )
+}
+
+const Stage = () => {
+  const w = plains[0].length;
+  const h = plains.length;
+  return(
+    <div style={{display: 'flex', width: `calc(50px * ${w})`, flexWrap: 'wrap'}}>
+      {
+        plains.map((row) => {
+          return row.map((tile) => {
+            return(
+              <Tile surface={tile} />
+            )
+          })
+        })
+      }
+    </div>
+  )
+}
 
 const Equipment = ({ unit }) => {
   const eq = unit.equipment;
@@ -146,6 +183,8 @@ function App() {
     if (itemHeld) newInv.push(itemHeld)
     setInventory(newInv)
   }
+
+  return(<Stage />)
   
   return(
     <div>
